@@ -1,9 +1,21 @@
 const errors = require('restify-errors');
 const clientRepository = require('../repositories/client.repository');
 
+
+function formatarCPF(cpf) {
+    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+}
+
 exports.getAll = async (req, res) => {
-    const client = await clientRepository.findAll();
-    res.send(client);
+    const clients = await clientRepository.findAll();
+
+    // Para cada cliente, formata o CPF
+    const clientsFormatados = clients.map(client => ({
+        ...client,
+        cpf: formatarCPF(client.cpf)
+    }));
+
+    res.send(clientsFormatados);
     return;
 };
 
@@ -13,13 +25,15 @@ exports.getById = async (req, res) => {
 
     if (!client) return next(new errors.NotFoundError("Cliente não encontrado"));
 
+
+    client.cpf = formatarCPF(client.cpf);
     res.send(client);
     return;
 };
 
 exports.create = async (req, res) => {
     try {
-        if (!req.body || !req.body.nome || !req.body.preco) {
+        if (!req.body || !req.body.nome || !req.body.cpf) {
             res.send(400, { error: "Nome e CPF são obrigatórios" });
             return ;
         }
