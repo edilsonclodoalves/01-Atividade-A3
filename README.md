@@ -68,7 +68,7 @@ Este projeto é uma API RESTful desenvolvida com Node.js, Restify e Knex para ge
 - JavaScript
 
 ## 👨‍💻 Autor
-
+Edilson Clodoalves Galvão de Lima - RA 32214931
 Desenvolvido como atividade A3 da disciplina de programação para web.
 
 ---
